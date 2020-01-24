@@ -127,3 +127,16 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Data folder
+data/
+
+# Oauth file in case data folder will be tracked in the future
+oauth.txt
+
+# Regular config file
+config.json
+config.json.bkp
+
+# Pyc files
+*.pyc

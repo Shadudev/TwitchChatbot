@@ -21,7 +21,7 @@ CONNECTION_PARAMETERS = {
 	'host': "irc.twitch.tv",
 	'port': 6667,
 	'oauth_pass': read_file(OAUTH_FILE_PATH),
-	'username': "ShaduDev",
+	'username': "TheShadude",
 	'channel': "shadudev"
 }
 
@@ -40,7 +40,8 @@ def set_value(config_key, new_value):
 
 @contextlib.contextmanager
 def current_config():
-	yield read_config()
+	config = read_config()
+	yield config
 	update_config(config)
 
 

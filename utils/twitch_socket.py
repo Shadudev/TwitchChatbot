@@ -14,12 +14,21 @@ class TwitchSocket(object):
 
 	def connect(self, host, port, oauth_pass, username, channel):
 		self._socket.connect((host, port))
+		self._login(username, oauth_pass)
+		self._join_chat_room(channel)
+		self._register_tags()
+
+	def _login(self, username, oauth_pass):
 		self._socket.send("PASS " + oauth_pass + "\r\n")
 		self._socket.send("NICK " + username + "\r\n")
+
+	def _join_chat_room(self, channel):
 		self._socket.send("JOIN #" + channel + "\r\n")
-		self._socket.send("CAP REQ :twitch.tv/tags\r\n")
 		self._channel = channel
-	
+
+	def _register_tags(self):
+		self._socket.send("CAP REQ :twitch.tv/tags\r\n")
+
 	def send(self, message):
 		packed_message = "PRIVMSG #{} :{}\r\n".format(self._channel, message)
 		self._socket.send(packed_message)
@@ -39,7 +48,6 @@ class TwitchSocket(object):
 			chat_messages.remove(PING_MESSAGE)
 
 		self._messages += filter(lambda message: ChatMessage.is_chat_message(message), chat_messages)
-
 
 	def _pong(self):
 		self._socket.send(PONG_MESSAGE)

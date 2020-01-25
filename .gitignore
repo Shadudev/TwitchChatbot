@@ -140,3 +140,6 @@ config.json.bkp
 
 # Pyc files
 *.pyc
+
+# IDE files
+.idea/

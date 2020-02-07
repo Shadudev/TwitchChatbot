@@ -85,7 +85,7 @@ class DadJokesTeller(CommandHandler):
 
 
 	def _choose_random_file(self, path):
-		files = filter(lambda fname: fname.endswith('.txt'), os.listdir(path))
+		files = list(filter(lambda fname: fname.endswith('.txt'), os.listdir(path)))
 		return files[random.randrange(len(files))]
 		
 
@@ -207,8 +207,8 @@ class DadJokesTeller(CommandHandler):
 
 
 	def _dump_json_to_file(self, file_path, file_data):
-		with open(file_path, 'wb') as f:
-			json.dump(file_data, f)
+		with open(file_path, 'w', encoding='utf8') as f:
+			json.dump(file_data, f, ensure_ascii=False)
 
 
 	def _read_json_from_file(self, file_path):
@@ -222,12 +222,12 @@ class DadJokesTeller(CommandHandler):
 
 
 	def _write_file(self, path, content):
-		with open(path, 'wb') as f:
+		with open(path, 'w') as f:
 			f.write(content)
 
 
 	def _append_file(self, path, content):
-		with open(path, 'ab') as f:
+		with open(path, 'a') as f:
 			f.write(content+'\n')
 
 

@@ -17,10 +17,6 @@ class Chatbot(object):
 		self._twitch_socket.connect(**configuration.CONNECTION_PARAMETERS)
 		while True:
 			chat_message = self._twitch_socket.recv_message()
-			#print 'mod?{},sub?{}-{},vip?{},bits?{}-{},{} ({}): {}'.format(
-			#	chat_message.is_mod, chat_message.is_sub, chat_message.sub_length, chat_message.is_vip,
-			#	chat_message.bits, chat_message.cheer_badge, chat_message.display_name, chat_message.user, 
-			#	chat_message.message)
 
 			for command_handler in self._command_handlers:
 				if command_handler.should_handle_message(chat_message):

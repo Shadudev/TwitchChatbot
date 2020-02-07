@@ -21,7 +21,7 @@ CONNECTION_PARAMETERS = {
 	'host': "irc.twitch.tv",
 	'port': 6667,
 	'oauth_pass': read_file(OAUTH_FILE_PATH),
-	'username': "TheShadude",
+	'username': "ShaduDevBot",
 	'channel': "shadudev"
 }
 

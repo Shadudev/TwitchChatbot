@@ -40,7 +40,7 @@ class ChatMessage(object):
 				elif badge_id == VIP_BADGE_ID:
 					self.is_vip = True
 				elif badge_id == CHEER_BADGE_ID:
-					self.cheer_badge = int(tag_value)
+					self.cheer_badge = int(value[value.index('/')+1:])
 
 	def _parse_bits(self, bits_amount):
 		self.bits = int(bits_amount)
@@ -60,10 +60,14 @@ class ChatMessage(object):
 	def _parse_user(self, user_type):
 		self.user = re.match('.*@(.*).tmi.twitch.tv.*', user_type).group(1)
 
+	def _parse_custom_reward_id(self, custom_reward_id):
+		self.custom_reward_id = custom_reward_id
+
 	@staticmethod
 	def is_chat_message(message_data):
 		return re.match(MESSAGE_DATA_REGEX, message_data) is not None
 
 	TAGS_PARSERS = {'@badge-info': _parse_badge_info, 'badges': _parse_badge_info,
 					'bits': _parse_bits, 'display-name': _parse_display_name, 'mod': _parse_mod,
-					'subscriber': _parse_subscriber, 'user-id': _parse_user_id, 'user-type': _parse_user}
+					'subscriber': _parse_subscriber, 'user-id': _parse_user_id, 'user-type': _parse_user,
+					'custom-reward-id': _parse_custom_reward_id}

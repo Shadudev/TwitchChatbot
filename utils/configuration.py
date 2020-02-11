@@ -7,9 +7,17 @@ DATA_FOLDER_PATH = 'data'
 OAUTH_FILE_NAME = 'oauth.txt'
 CONFIG_FILE_NAME = 'config.json'
 BACKUP_FILE_EXTENSION = '.bkp'
+PRIVATE_DEFAULTS = {}
 
 OAUTH_FILE_PATH = os.path.join(DATA_FOLDER_PATH, OAUTH_FILE_NAME)
 CONFIG_FILE_PATH = os.path.join(DATA_FOLDER_PATH, CONFIG_FILE_NAME)
+
+
+def initialize(script_defaults={}):
+	default_config = script_defaults.copy()
+	default_config.update(PRIVATE_DEFAULTS)
+	if not os.path.exists(CONFIG_FILE_PATH):
+		update_config(default_config)
 
 
 def read_file(file_path):
@@ -50,7 +58,7 @@ def read_config():
 
 
 def read_json_from_file(file_path):
-	return json.load(read_file(file_path))
+	return json.loads(read_file(file_path))
 
 
 def update_config(config):

@@ -1,4 +1,5 @@
 import socket
+from utils import configuration
 from utils.chat_message import ChatMessage
 
 
@@ -8,9 +9,13 @@ PONG_MESSAGE = 'PONG :tmi.twitch.tv'
 
 class TwitchSocket(object):
 	def __init__(self):
-		self._socket = socket.socket()
+		self.init_socket()		
 		self._messages = []
 		self._last_incomplete_msg = ''
+
+	def init_socket(self):
+		self._socket = socket.socket()
+		self.connect(**configuration.CONNECTION_PARAMETERS)
 
 	def connect(self, host, port, oauth_pass, username, channel):
 		self._socket.connect((host, port))
@@ -43,13 +48,13 @@ class TwitchSocket(object):
 
 	def _recv_messages(self):
 		chat_messages = self._last_incomplete_msg + self._socket.recv(1024).decode('utf8')
+		if len(chat_messages) == 0:
+			print('ERROR')
+			self.init_socket()
 
 		chat_messages = chat_messages.split('\r\n')
 		self._last_incomplete_msg = chat_messages.pop(-1)
-		if len(chat_messages) == 0:
-			print("ERROR")
-		else:
-			print('\n'.join(chat_messages))
+		print('\n'.join(chat_messages))
 
 		if PING_MESSAGE in chat_messages:
 			self._pong()

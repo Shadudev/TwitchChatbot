@@ -9,6 +9,8 @@ from modules.command_handler import CommandHandler
 
 
 ScriptName = COMMAND_ID = '!dad'
+COMMAND_REWARD_ID = '799b6367-fc89-4159-8932-d34157150e21'
+
 Website = ''
 Description = 'Capable of printing strings from a file in a given folder'
 Creator = 'TheShadu'
@@ -35,8 +37,8 @@ MOD_PERMISSIONS = 'Moderator'
 
 
 class DadJokesTeller(CommandHandler):
-	def __init__(self, send_message_func):
-		super(DadJokesTeller, self).__init__(send_message_func)
+	def __init__(self, send_message_func, cooldown_manager):
+		super(DadJokesTeller, self).__init__(send_message_func, cooldown_manager)
 
 		if not os.path.exists(JOKES_FOLDER_PATH):
 			os.mkdir(JOKES_FOLDER_PATH)
@@ -47,7 +49,7 @@ class DadJokesTeller(CommandHandler):
 		copyfile(SETTINGS_FILE_PATH, SETTINGS_BACKUP_FILE_PATH)
 
 	def should_handle_message(self, chat_message):
-		return chat_message.message.startswith(COMMAND_ID)
+		return getattr(chat_message, 'custom_reward_id', None) == COMMAND_REWARD_ID
 
 	def handle_message(self, chat_message):
 		if not chat_message.is_mod:

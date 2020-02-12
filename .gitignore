@@ -143,3 +143,6 @@ config.json.bkp
 
 # IDE files
 .idea/
+
+# Data files
+*.txt

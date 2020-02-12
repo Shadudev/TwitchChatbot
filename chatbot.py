@@ -4,7 +4,7 @@ from datetime import timedelta
 from time import sleep
 
 from scripts import scripts
-from utils import configuration, log
+from utils import configuration
 from utils.twitch_socket import TwitchSocket
 
 

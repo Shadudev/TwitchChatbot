@@ -28,6 +28,7 @@ class Chatbot(object):
 
 		while self._is_running:
 			chat_message = self._twitch_socket.recv_message()
+			print(chat_message.display_name + ': ' + chat_message.message)
 
 			for command_handler in self._command_handlers:
 				try:

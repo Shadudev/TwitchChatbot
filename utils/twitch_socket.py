@@ -49,12 +49,10 @@ class TwitchSocket(object):
 	def _recv_messages(self):
 		chat_messages = self._last_incomplete_msg + self._socket.recv(1024).decode('utf8')
 		if len(chat_messages) == 0:
-			print('ERROR')
 			self.init_socket()
 
 		chat_messages = chat_messages.split('\r\n')
 		self._last_incomplete_msg = chat_messages.pop(-1)
-		print('\n'.join(chat_messages))
 
 		if PING_MESSAGE in chat_messages:
 			self._pong()

@@ -146,3 +146,5 @@ config.json.bkp
 
 # Data files
 *.txt
+*.mp3
+*.bkp

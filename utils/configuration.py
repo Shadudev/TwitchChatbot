@@ -2,8 +2,8 @@ import contextlib
 import json
 import os
 
-
-DATA_FOLDER_PATH = 'data'
+SCRIPT_BASE_PATH = os.path.dirname(__file__)
+DATA_FOLDER_PATH = os.path.join(SCRIPT_BASE_PATH, '../data')
 OAUTH_FILE_NAME = 'oauth.txt'
 CONFIG_FILE_NAME = 'config.json'
 BACKUP_FILE_EXTENSION = '.bkp'

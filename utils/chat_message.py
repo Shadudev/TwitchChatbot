@@ -67,6 +67,7 @@ class ChatMessage(object):
 	def is_chat_message(message_data):
 		return re.match(MESSAGE_DATA_REGEX, message_data) is not None
 
+
 	TAGS_PARSERS = {'@badge-info': _parse_badge_info, 'badges': _parse_badge_info,
 					'bits': _parse_bits, 'display-name': _parse_display_name, 'mod': _parse_mod,
 					'subscriber': _parse_subscriber, 'user-id': _parse_user_id, 'user-type': _parse_user,

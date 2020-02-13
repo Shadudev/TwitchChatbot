@@ -15,14 +15,14 @@ class DynamicDictionary(CommandHandler):
 
 	def handle_message(self, chat_message):
 		try:
-			if chat_message.is_mod:
+			if chat_message.is_mod or chat_message.is_streamer:
 				_, word, translation = chat_message.message.split(' ')
 				self.add_to_dictionary(word, translation)
 				self.send_message('Oh, so {} is actually {}.'.format(word, translation))
 			else:
-				show_usage()
+				self.show_usage()
 		except:
-			show_usage()
+			self.show_usage()
 
 	def show_usage(self):
 		self.send_message("No, it's !uwu word twanswation-nya. Oh, and mods only!")

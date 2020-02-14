@@ -103,6 +103,10 @@ class DynamicSettingsHandler(CommandHandler):
 		self._settings.add_category_from_unallowed_list(sound_id, current_category)
 		self.send_message('No more {}s when doing "{}"'.format(sound_id, current_category))
 
+	def reset_cooldown(self, command_args):
+		sound_id = command_args[SOUND_ID_INDEX]
+		self._cooldown_manager.set_off_cooldown(sound_id, '')
+
 	def disable_all_sounds(self):
 		self._settings.set_general_enabled_status(False)
 		self.send_message('All sounds have been disabled.')
@@ -123,6 +127,7 @@ class DynamicSettingsHandler(CommandHandler):
 			self.enable_all_sounds()
 
 	MOD_OPERATIONS = {'allow': allow_category, 'unallow': unallow_category, 
-				  	  'enable': enable_sound, 'disable': disable_sound}
+				  	  'enable': enable_sound, 'disable': disable_sound,
+				  	  'reset': reset_cooldown}
 	ALL_SOUNDS_COMMANDS_HANDLERS = {DISABLE_ALL_COMMAND: disable_all_sounds, ENABLE_ALL_COMMAND: enable_all_sounds,
 	                                TOGGLE_ALL_COMMAND: toggle_all_sounds}

@@ -14,7 +14,7 @@ class Soundbot(CommandHandler):
 
 	def should_handle_message(self, chat_message):
 		command = chat_message.message.split(' ')[0]
-		return self._settings.does_sound_exist(command.lstrip('!')) or command in Soundbot.LIST_COMMAND_HANDLERS
+		return command[0] == '!' and self._settings.does_sound_exist(command[1:]) or command in Soundbot.LIST_COMMAND_HANDLERS
 			
 	def handle_message(self, chat_message):
 		if chat_message.is_mod or chat_message.is_streamer:

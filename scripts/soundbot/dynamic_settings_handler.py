@@ -9,10 +9,6 @@ VALUE_INDEX = 2
 
 ALL_MAGIC = '*'
 
-DISABLE_ALL_COMMAND = 'sounds mute'
-ENABLE_ALL_COMMAND = 'sounds unmute'
-TOGGLE_ALL_COMMAND = 'sounds toggle'
-
 
 class DynamicSettingsHandler(CommandHandler):
 	def __init__(self, send_message_func, cooldown_manager, settings):
@@ -32,22 +28,22 @@ class DynamicSettingsHandler(CommandHandler):
 	def is_mod_command(self, command_args):
 		if self.is_get_command(command_args):
 			return True
-		if len(command_args) > MOD_OPERATION_INDEX and command_args[MOD_OPERATION_INDEX].lower() in DynamicSettingsHandler.MOD_OPERATIONS:
+		if len(command_args) > MOD_OPERATION_INDEX and command_args[MOD_OPERATION_INDEX].lower() in DynamicSettingsHandler.MOD_SOUND_OPERATIONS:
 			return True
-		if len(command_args) == 2 and ' '.join(command_args) in DynamicSettingsHandler.ALL_SOUNDS_COMMANDS_HANDLERS:
+		if len(command_args) == 2 and ' '.join(command_args) in DynamicSettingsHandler.MOD_ALL_SOUNDS_OPERATIONS:
 			return True
 		return False
 
 	def handle_mod_command(self, command_args):
 		command_line = ' '.join(command_args)
-		if command_line in DynamicSettingsHandler.ALL_SOUNDS_COMMANDS_HANDLERS:
-			DynamicSettingsHandler.ALL_SOUNDS_COMMANDS_HANDLERS[command_line](self)
+		if command_line in DynamicSettingsHandler.MOD_ALL_SOUNDS_OPERATIONS:
+			DynamicSettingsHandler.MOD_ALL_SOUNDS_OPERATIONS[command_line](self)
 		elif self.is_set_command(command_args):
 			self.handle_set_command(command_args)
 		elif self.is_get_command(command_args):
 			self.handle_get_command(command_args)
 		else:
-			DynamicSettingsHandler.MOD_OPERATIONS[command_args[MOD_OPERATION_INDEX]](self, command_args)
+			DynamicSettingsHandler.MOD_SOUND_OPERATIONS[command_args[MOD_OPERATION_INDEX]](self, command_args)
 
 	def handle_get_command(self, command_args):
 		sound_id = command_args[SOUND_ID_INDEX]
@@ -126,8 +122,8 @@ class DynamicSettingsHandler(CommandHandler):
 		else:
 			self.enable_all_sounds()
 
-	MOD_OPERATIONS = {'allow': allow_category, 'unallow': unallow_category, 
+	MOD_SOUND_OPERATIONS = {'allow': allow_category, 'unallow': unallow_category, 
 				  	  'enable': enable_sound, 'disable': disable_sound,
 				  	  'reset': reset_cooldown}
-	ALL_SOUNDS_COMMANDS_HANDLERS = {DISABLE_ALL_COMMAND: disable_all_sounds, ENABLE_ALL_COMMAND: enable_all_sounds,
-	                                TOGGLE_ALL_COMMAND: toggle_all_sounds}
+	MOD_ALL_SOUNDS_OPERATIONS = {'sounds mute': disable_all_sounds, 'sounds unmute': enable_all_sounds,
+	                                'sounds toggle': toggle_all_sounds}

@@ -39,11 +39,7 @@ class TwitchSocket(object):
 		self._send(packed_message)
 
 	def _send(self, data):
-		try:
-			self._socket.send(data.encode('utf8'))
-		except ConnectionAbortedError:
-			self.init_socket()
-			self._socket.send(data.encode('utf8'))
+		self._socket.send(data.encode('utf8'))
 
 	def recv_message(self):
 		while len(self._messages) < 1:
@@ -53,7 +49,7 @@ class TwitchSocket(object):
 	def _recv_messages(self):
 		try:
 			received_messages = self._socket.recv(1024).decode('utf8')
-		except ConnectionAbortedError:
+		except (ConnectionAbortedError, ConnectionResetError):
 			self.init_socket()
 			received_messages = self._socket.recv(1024).decode('utf8')
 			

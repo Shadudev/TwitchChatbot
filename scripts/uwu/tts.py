@@ -29,7 +29,7 @@ class UwUTTS(object):
 				with open(CHARS_COUNT_PATH, 'w') as f:
 					f.write('0')
 				with open(LOG_PATH, 'a') as f:
-					f.write('Count reset going into {}, \n'.format(today.month, today.year))
+					f.write('Count reset going into {}.{} \n'.format(today.month, today.year))
 
 
 	def get_speech(self, text, output_speech_file):

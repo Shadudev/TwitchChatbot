@@ -9,7 +9,7 @@ PONG_MESSAGE = 'PONG :tmi.twitch.tv'
 
 class TwitchSocket(object):
 	def __init__(self):
-		self.init_socket()		
+		self.init_socket()
 		self._messages = []
 		self._last_incomplete_msg = ''
 
@@ -24,22 +24,22 @@ class TwitchSocket(object):
 		self._register_tags()
 
 	def _login(self, username, oauth_pass):
-		self._send("PASS " + oauth_pass + "\r\n")
-		self._send("NICK " + username + "\r\n")
+		self._send("PASS " + oauth_pass)
+		self._send("NICK " + username)
 
 	def _join_chat_room(self, channel):
-		self._send("JOIN #" + channel + "\r\n")
+		self._send("JOIN #" + channel)
 		self._channel = channel
 
 	def _register_tags(self):
-		self._send("CAP REQ :twitch.tv/tags\r\n")
+		self._send("CAP REQ :twitch.tv/tags")
 
 	def send(self, message):
-		packed_message = "PRIVMSG #{} :{}\r\n".format(self._channel, message)
+		packed_message = "PRIVMSG #{} :{}".format(self._channel, message)
 		self._send(packed_message)
 
 	def _send(self, data):
-		self._socket.send(data.encode('utf8'))
+		self._socket.send(str(data + '\r\n').encode('utf8'))
 
 	def recv_message(self):
 		while len(self._messages) < 1:
@@ -55,7 +55,7 @@ class TwitchSocket(object):
 			
 		chat_messages = self._last_incomplete_msg + received_messages
 
-		chat_messages = chat_messages.split('\r\n')
+		chat_messages = chat_messages.split('')
 		self._last_incomplete_msg = chat_messages.pop(-1)
 
 		if PING_MESSAGE in chat_messages:
@@ -68,5 +68,5 @@ class TwitchSocket(object):
 		self._send(PONG_MESSAGE)
 
 	def close(self):
-		self._send("PART #" + self._channel + "\r\n")
+		self._send("PART #" + self._channel + "")
 		self._socket.close()

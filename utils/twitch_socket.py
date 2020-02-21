@@ -3,6 +3,7 @@ from utils import configuration
 from utils.chat_message import ChatMessage
 
 
+LINE_BREAK = '\r\n'
 PING_MESSAGE = 'PING :tmi.twitch.tv'
 PONG_MESSAGE = 'PONG :tmi.twitch.tv'
 
@@ -39,7 +40,7 @@ class TwitchSocket(object):
 		self._send(packed_message)
 
 	def _send(self, data):
-		self._socket.send(str(data + '\r\n').encode('utf8'))
+		self._socket.send(str(data + LINE_BREAK).encode('utf8'))
 
 	def recv_message(self):
 		while len(self._messages) < 1:
@@ -55,7 +56,7 @@ class TwitchSocket(object):
 			
 		chat_messages = self._last_incomplete_msg + received_messages
 
-		chat_messages = chat_messages.split('')
+		chat_messages = chat_messages.split(LINE_BREAK)
 		self._last_incomplete_msg = chat_messages.pop(-1)
 
 		if PING_MESSAGE in chat_messages:

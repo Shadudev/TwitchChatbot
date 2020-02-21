@@ -7,6 +7,7 @@ LINE_BREAK = '\r\n'
 PING_MESSAGE = 'PING :tmi.twitch.tv'
 PONG_MESSAGE = 'PONG :tmi.twitch.tv'
 
+MESSAGE_MAX_CHARACTERS = 500
 
 class TwitchSocket(object):
 	def __init__(self):
@@ -35,9 +36,11 @@ class TwitchSocket(object):
 	def _register_tags(self):
 		self._send("CAP REQ :twitch.tv/tags")
 
-	def send(self, message):
-		packed_message = "PRIVMSG #{} :{}".format(self._channel, message)
-		self._send(packed_message)
+	def send_message(self, message):
+		message_segments = [message[i:i+MESSAGE_MAX_CHARACTERS] for i in range(0, len(message), MESSAGE_MAX_CHARACTERS)]
+		for segment in message_segments:
+			wrapped_segment = "PRIVMSG #{} :{}".format(self._channel, segment)
+			self._send(wrapped_segment)
 
 	def _send(self, data):
 		self._socket.send(str(data + LINE_BREAK).encode('utf8'))

@@ -30,13 +30,10 @@ class UwUHandler(CommandHandler):
 		uwu_text = self._translate(text)
 		self.send_message('UwU: ' + uwu_text)
 
-		if os.path.exists(TTS_OUTPUT_FILE):
-			os.unlink(TTS_OUTPUT_FILE)
-		self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE)
+		#if os.path.exists(TTS_OUTPUT_FILE):
+		#	os.unlink(TTS_OUTPUT_FILE)
+		#self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE)
 		playsound(TTS_OUTPUT_FILE)
-
-	def show_usage(self):
-		self.send_message('Command should be used like so: !uwu this is a very long sentence')
 
 	def _translate(self, text):
 		words = text.split(' ')

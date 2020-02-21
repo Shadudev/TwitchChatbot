@@ -62,7 +62,7 @@ class Chatbot(object):
 
 
 	def inst_send_message(self, message):
-		self._twitch_socket.send(message)
+		self._twitch_socket.send_message(message)
 
 	@staticmethod
 	def send_message(message):

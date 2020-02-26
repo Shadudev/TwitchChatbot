@@ -1,5 +1,8 @@
 import os
-os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
+try:
+	os.add_dll_directory(r'C:\Program Files\VideoLAN\VLC')
+except AttributeError as e:
+	pass # Python 3.8-
 import vlc
 
 

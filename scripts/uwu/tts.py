@@ -32,16 +32,16 @@ class UwUTTS(object):
 					f.write('Count reset going into {}.{} \n'.format(today.month, today.year))
 
 
-	def get_speech(self, text, output_speech_file):
+	def get_speech(self, text, output_speech_file, language_code=VOICE_LANGUAGE_CODE, voice_name=VOICE_NAME, speaking_rate=SPEAKING_RATE, pitch=PITCH):
 		client = texttospeech.TextToSpeechClient()
 
 		synthesis_input = texttospeech.types.SynthesisInput(text=text)
 		voice = texttospeech.types.VoiceSelectionParams(
-		    language_code=VOICE_LANGUAGE_CODE,
-		    name=VOICE_NAME)
+		    language_code=language_code,
+		    name=voice_name)
 		audio_config = texttospeech.types.AudioConfig(
 		    audio_encoding=texttospeech.enums.AudioEncoding.MP3,
-		    speaking_rate=SPEAKING_RATE, pitch=PITCH)
+		    speaking_rate=speaking_rate, pitch=pitch)
 
 		response = client.synthesize_speech(synthesis_input, voice, audio_config)
 		self._update_characters_count(text)

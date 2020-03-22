@@ -4,7 +4,7 @@ from random import choice
 from modules.timer import Timer
 from utils.configuration import get_value, set_value
 
-DEFAULT_MESSAGING_INTERVAL = timedelta(minutes=15)
+DEFAULT_MESSAGING_INTERVAL = timedelta(minutes=45)
 # Interval configuration key
 INTERVAL_CONFIG_KEY = "promotion_interval"
 

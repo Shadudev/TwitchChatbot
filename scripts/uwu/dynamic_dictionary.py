@@ -11,7 +11,7 @@ class DynamicDictionary(CommandHandler):
 		super(DynamicDictionary, self).__init__(send_message_func, cooldown_manager)
 
 	def should_handle_message(self, chat_message):
-		return chat_message.message.startswith(COMMAND_ID)
+		return chat_message.message.split(' ')[0] == COMMAND_ID
 
 	def handle_message(self, chat_message):
 		try:

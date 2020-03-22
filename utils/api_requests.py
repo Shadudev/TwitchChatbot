@@ -9,3 +9,9 @@ def get_stream_category():
 	channel_id = response.json()['users'][0]['_id']
 	response = requests.get('https://api.twitch.tv/kraken/channels/' + channel_id, headers=twitch_headers)
 	return response.json()['game']
+
+
+def get_channel_id(channel_name):
+	twitch_headers = {'Client-ID': 'q6batx0epp608isickayubi39itsckt', 'Accept': 'application/vnd.twitchtv.v5+json'}
+	response = requests.get('https://api.twitch.tv/kraken/users?login=' + configuration.CONNECTION_PARAMETERS['channel'], headers=twitch_headers)
+	return response.json()['users'][0]['_id']

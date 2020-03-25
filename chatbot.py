@@ -3,9 +3,9 @@ import traceback
 from datetime import timedelta
 from time import sleep
 
-from scripts import scripts
-from utils import configuration
-from utils.twitch_socket import TwitchSocket
+from extensions import extensions
+from core.framework import configuration
+from core.twitch.twitch_socket import TwitchSocket
 
 
 class Chatbot(object):
@@ -19,8 +19,8 @@ class Chatbot(object):
 		configuration.initialize()
 		self._twitch_socket = TwitchSocket()
 		self._is_running = True
-		self._timers = scripts.get_timers(Chatbot.send_message)
-		self._command_handlers = scripts.get_command_handlers(Chatbot.send_message)
+		self._timers = extensions.get_timers(Chatbot.send_message)
+		self._command_handlers = extensions.get_command_handlers(Chatbot.send_message)
 		self._timer_thread = threading.Thread(target=self.handle_timers)
 
 	def serve_forever(self):

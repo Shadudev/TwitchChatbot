@@ -1,6 +1,6 @@
 import json
 import requests
-from utils import configuration
+from core.framework import configuration
 
 
 def get_stream_category():

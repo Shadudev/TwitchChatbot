@@ -1,10 +1,9 @@
 import json
 import os
 from time import sleep
-from playsound import playsound
 from core.framework.extensions.bases.command_handler import CommandHandler
 
-from extensions.uwu import tts
+from extensions.uwu import tts, sound_player
 from extensions.uwu.dynamic_dictionary import DynamicDictionary
 
 COMMAND_REWARD_ID = '72cc6239-9f74-4953-8d87-64d396d952da'
@@ -33,7 +32,7 @@ class UwUHandler(CommandHandler):
 		if os.path.exists(TTS_OUTPUT_FILE):
 			os.unlink(TTS_OUTPUT_FILE)
 		self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE)
-		playsound(TTS_OUTPUT_FILE)
+		sound_player.play_sound(TTS_OUTPUT_FILE, 1)
 
 	def _translate(self, text):
 		words = text.split(' ')

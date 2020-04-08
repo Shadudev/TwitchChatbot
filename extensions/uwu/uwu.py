@@ -1,6 +1,7 @@
 import json
 import os
 from time import sleep
+from core.framework import configuration
 from core.framework.extensions.bases.command_handler import CommandHandler
 
 from extensions.uwu import tts, sound_player
@@ -31,7 +32,7 @@ class UwUHandler(CommandHandler):
 
 		if os.path.exists(TTS_OUTPUT_FILE):
 			os.unlink(TTS_OUTPUT_FILE)
-		self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE)
+		self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE, configuration.get_channel_name())
 		sound_player.play_sound(TTS_OUTPUT_FILE, 1)
 
 	def _translate(self, text):

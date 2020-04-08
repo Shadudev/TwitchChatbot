@@ -25,13 +25,18 @@ def read_file(file_path):
 		return f.read()
 
 
+CHANNEL_PROPERTY_KEY = 'channel'
 CONNECTION_PARAMETERS = {
 	'host': "irc.twitch.tv",
 	'port': 6667,
 	'oauth_pass': read_file(OAUTH_FILE_PATH),
 	'username': "ShaduDevBot",
-	'channel': "shadudev"
+	CHANNEL_PROPERTY_KEY: "shadudev"
 }
+
+
+def get_channel_name():
+	return CONNECTION_PARAMETERS[CHANNEL_PROPERTY_KEY]
 
 
 def get_value(config_key, default_value):

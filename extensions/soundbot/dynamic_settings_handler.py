@@ -1,7 +1,7 @@
 import datetime
 from extensions.soundbot import settings
 from core.framework.extensions.bases.command_handler import CommandHandler
-from utils import api_requests
+from core.twitch import api_requests
 
 SOUND_ID_INDEX = 0
 MOD_OPERATION_INDEX = PROPERTY_INDEX = 1

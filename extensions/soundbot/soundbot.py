@@ -2,7 +2,7 @@ from core.framework.extensions.bases.command_handler import CommandHandler
 from extensions.soundbot.dynamic_settings_handler import DynamicSettingsHandler
 from extensions.soundbot.settings import SoundbotSettings
 from extensions.soundbot.sound_player import SoundPlayer
-from utils import api_requests
+from core.twitch import api_requests
 
 
 class Soundbot(CommandHandler):

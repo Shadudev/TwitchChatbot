@@ -4,7 +4,7 @@ from datetime import timedelta
 from time import sleep
 
 from extensions import extensions
-from core.framework import configuration
+from core.framework import configuration, media_player
 from core.twitch.twitch_socket import TwitchSocket
 
 
@@ -16,7 +16,8 @@ class Chatbot(object):
 	def __init__(self):
 		Chatbot._chatbot = self
 
-		configuration.initialize()
+		self.initialize_framework()
+		
 		self._twitch_socket = TwitchSocket()
 		self._is_running = True
 		self._timers = extensions.get_timers(Chatbot.send_message)
@@ -70,3 +71,7 @@ class Chatbot(object):
 	@staticmethod
 	def send_message(message):
 		Chatbot._chatbot.inst_send_message(message)
+
+	def initialize_framework(self):
+		configuration.initialize()
+		media_player.MediaPlayer.initialize()

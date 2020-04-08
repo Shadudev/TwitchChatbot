@@ -1,8 +1,8 @@
 from core.framework.extensions.bases.command_handler import CommandHandler
+from core.framework.media_player import MediaPlayer
+from core.twitch import api_requests
 from extensions.soundbot.dynamic_settings_handler import DynamicSettingsHandler
 from extensions.soundbot.settings import SoundbotSettings
-from extensions.soundbot.sound_player import SoundPlayer
-from core.twitch import api_requests
 
 
 class Soundbot(CommandHandler):
@@ -10,7 +10,6 @@ class Soundbot(CommandHandler):
 		super(Soundbot, self).__init__(send_message_func, cooldown_manager)
 		self._settings = SoundbotSettings()
 		self._settings_handler = DynamicSettingsHandler(send_message_func, cooldown_manager, self._settings)
-		self._player = SoundPlayer()
 
 	def should_handle_message(self, chat_message):
 		command = chat_message.message.split(' ')[0]
@@ -77,7 +76,7 @@ class Soundbot(CommandHandler):
 	def play_sound(self, sound_id):
 		sound_path = self._settings.get_sound_path(sound_id)
 		volume = self._settings.get_volume(sound_id)
-		self._player.play(sound_path, volume=volume)
+		MediaPlayer.play(sound_path, volume=volume)
 
 
 	LIST_COMMAND_HANDLERS = {'!sounds': list_allowed_sounds, '!allsounds': list_all_sounds}

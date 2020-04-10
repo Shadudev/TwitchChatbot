@@ -5,7 +5,7 @@ def main():
 	with open('Jokes\\jokes.txt') as f:
 		untold_jokes = set(eval(f.read()))
 
-	print '\n\n'.join(all_jokes.difference(untold_jokes))
+	print('\n\n'.join(all_jokes.difference(untold_jokes)))
 
 if __name__ == "__main__":
 	main()

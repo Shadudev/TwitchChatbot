@@ -148,3 +148,4 @@ config.json.bkp
 *.txt
 *.mp3
 *.bkp
+dictionary.json

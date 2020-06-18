@@ -12,7 +12,7 @@ INTERVAL_CONFIG_KEY = "promotion_interval"
 MESSAGES = [
 "This Shadude has coded his own sounds commands player. Write !sounds and enjoy!",
 "If you're having fun and wanna stay tuned with w.e. is going on off stream too, join the Shadudes Hangout! https://discord.gg/vv9uEan",
-"Each sub can choose each month what hat I shall wear for the rest of a stream. Do !hats for the existing hats."
+"Use your points to choose what hat I shall wear for about an hour. Do !hats for the existing hats."
 ]
 
 

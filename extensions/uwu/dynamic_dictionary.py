@@ -2,7 +2,7 @@ import json
 import os
 from core.framework.extensions.bases.command_handler import CommandHandler
 
-COMMAND_ID = '!uwu'
+COMMAND_ID = '!dict'
 SCRIPT_BASE_PATH = os.path.dirname(__file__)
 DICTIONARY_FILE = os.path.join(SCRIPT_BASE_PATH, 'dictionary.json')
 
@@ -16,7 +16,8 @@ class DynamicDictionary(CommandHandler):
 	def handle_message(self, chat_message):
 		try:
 			if chat_message.is_mod or chat_message.is_streamer:
-				_, word, translation = chat_message.message.split(' ')
+				split_message = chat_message.message.split(' ')
+				_, word, translation = split_message[0], split_message[1], split_message[2:]
 				self.add_to_dictionary(word, translation)
 				self.send_message('Oh, so {} is actually {}.'.format(word, translation))
 			else:
@@ -25,7 +26,7 @@ class DynamicDictionary(CommandHandler):
 			self.show_usage()
 
 	def show_usage(self):
-		self.send_message("No, it's !uwu word twanswation-nya. Oh, and mods only!")
+		self.send_message("No, it's {} <word> <twanswation-nya>. Oh, and mods only!".format(COMMAND_ID))
 
 	def add_to_dictionary(self, word, translation):
 		dictionary = DynamicDictionary.get_dictionary()

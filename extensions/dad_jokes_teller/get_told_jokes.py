@@ -7,5 +7,6 @@ def main():
 
 	print('\n\n'.join(all_jokes.difference(untold_jokes)))
 
+
 if __name__ == "__main__":
 	main()

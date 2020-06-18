@@ -59,7 +59,7 @@ class HatsHandler(CommandHandler):
 			self.send_message('Unknown operation.')
 
 	def list_hats(self):
-		hats_list_message = 'Subs can choose once a month what hat I shall wear for the stream. Existing hats: {}'
+		hats_list_message = 'With 400 glitches, one can !redeem what hat I shall wear for an hour. Existing hats: {}'
 		hats_list = self.alternative_join(HATS_LIST, [TAKENRG_EMOTE, GIVEPLZ_EMOTE])
 		self.send_message(hats_list_message.format(hats_list))
 

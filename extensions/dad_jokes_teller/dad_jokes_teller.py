@@ -8,31 +8,13 @@ from shutil import copyfile
 from core.framework.extensions.bases.command_handler import CommandHandler
 
 
-ScriptName = COMMAND_ID = '!dad'
-COMMAND_REWARD_ID = '799b6367-fc89-4159-8932-d34157150e21'
-
-Website = ''
-Description = 'Capable of printing strings from a file in a given folder'
-Creator = 'TheShadu'
-Version = '1.0.0.0'
+COMMAND_ID = '!dad'
 
 SCRIPT_BASE_PATH = os.path.dirname(__file__)
-
 JOKES_FOLDER_PATH = os.path.join(SCRIPT_BASE_PATH, 'Jokes')
 JOKES_LOG_PATH = os.path.join(SCRIPT_BASE_PATH, 'log.txt')
-SETTINGS_FILE_PATH = os.path.join(SCRIPT_BASE_PATH, 'settings.ini')
-SETTINGS_BACKUP_FILE_PATH = SETTINGS_FILE_PATH + '.bkp'
 
-
-COMMAND_COOLDOWN_KEY = 'cooldown'
-USER_COOLDOWN_KEY = 'user_cooldown'
-MANUAL_COOLDOWN_RESET_KEY = 'cooldown_reset'
-PROPERTIES = [COMMAND_COOLDOWN_KEY, USER_COOLDOWN_KEY]
-DEFAULT_SETTINGS = {COMMAND_COOLDOWN_KEY: 5, USER_COOLDOWN_KEY: 30 * 60, MANUAL_COOLDOWN_RESET_KEY: False}
-
-ALL_PROPERTIES_MAGIC = '*'
-RESET_COOLDOWN_COMMAND = 'reset'
-MOD_PERMISSIONS = 'Moderator'
+USER_COOLDOWN = datetime.timedelta(minutes=30)
 
 
 class DadJokesTeller(CommandHandler):
@@ -42,15 +24,13 @@ class DadJokesTeller(CommandHandler):
 		if not os.path.exists(JOKES_FOLDER_PATH):
 			os.mkdir(JOKES_FOLDER_PATH)
 
-		if not os.path.exists(SETTINGS_FILE_PATH):
-			self.update_settings(DEFAULT_SETTINGS)
-
-		copyfile(SETTINGS_FILE_PATH, SETTINGS_BACKUP_FILE_PATH)
-
 	def should_handle_message(self, chat_message):
-		return getattr(chat_message, 'custom_reward_id', None) == COMMAND_REWARD_ID
+		command = chat_message.message.split(' ')[0]
+		is_on_cooldown = self._cooldown_manager.is_on_cooldown(COMMAND_ID, chat_message.user, USER_COOLDOWN)
+		return command == COMMAND_ID and not is_on_cooldown
 
 	def handle_message(self, chat_message):
+		self._cooldown_manager.set_on_cooldown(COMMAND_ID, chat_message.user)
 		self._tell_joke()
 
 

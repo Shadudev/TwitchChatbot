@@ -29,7 +29,7 @@ class UwUHandler(CommandHandler):
 
 	def is_user_on_cooldown(self, user):
 		user_cooldown = self._cooldowns.get(user, 0)
-		return self._cooldown_manager.is_on_cooldown(COMMAND_ID, user, user_cooldown)
+		return self._cooldown_manager.is_on_cooldown(COMMAND_ID, user, user_cooldown) and user != 'shadudev'
 
 	def _is_uwu_redeem(self, chat_message):
 		command = chat_message.message.split(' ')[0]

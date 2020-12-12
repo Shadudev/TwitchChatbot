@@ -27,12 +27,12 @@ class Chatbot(object):
 	def serve_forever(self):
 		print("Chatbot starting...")
 		self._timer_thread.start()
-		self._handle_chat_messages()
+		self.__handle_chat_messages()
 
 		self._twitch_socket.close()
 		self._timer_thread.join()
 
-	def _handle_chat_messages(self):
+	def __handle_chat_messages(self):
 		while self._is_running:
 			chat_message = self._twitch_socket.recv_message()
 			print(chat_message.display_name + ': ' + chat_message.message)

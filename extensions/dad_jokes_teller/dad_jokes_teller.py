@@ -1,10 +1,7 @@
 import datetime
-import json
 import os
 import random
-import sys
 
-from shutil import copyfile
 from core.framework.extensions.bases.command_handler import CommandHandler
 
 
@@ -31,43 +28,36 @@ class DadJokesTeller(CommandHandler):
 
 	def handle_message(self, chat_message):
 		self._cooldown_manager.set_on_cooldown(COMMAND_ID, chat_message.user)
-		self._tell_joke()
+		self.__tell_joke()
 
-
-	def _tell_joke(self):
-		chosen_file = self._choose_random_file(JOKES_FOLDER_PATH)
-		joke = self._pop_joke(os.path.join(JOKES_FOLDER_PATH, chosen_file))
+	def __tell_joke(self):
+		chosen_file = self.__choose_random_file(JOKES_FOLDER_PATH)
+		joke = self.__pop_joke(os.path.join(JOKES_FOLDER_PATH, chosen_file))
 		self.send_message(joke)
-		self._log(joke)
+		self.__log(joke)
 
-
-	def _choose_random_file(self, path):
+	def __choose_random_file(self, path):
 		files = list(filter(lambda fname: fname.endswith('.txt'), os.listdir(path)))
 		return files[random.randrange(len(files))]
-		
 
-	def _pop_joke(self, file_path):
-		jokes = eval(self._read_file(file_path))
+	def __pop_joke(self, file_path):
+		jokes = eval(self.__read_file(file_path))
 		index = random.randrange(len(jokes))
 		joke = jokes.pop(index)
-		self._write_file(file_path, str(jokes))
+		self.__write_file(file_path, str(jokes))
 		return joke
 
-
-	def _read_file(self, path):
+	def __read_file(self, path):
 		with open(path) as f:
 			return f.read()
 
-
-	def _write_file(self, path, content):
+	def __write_file(self, path, content):
 		with open(path, 'w') as f:
 			f.write(content)
 
-
-	def _append_file(self, path, content):
+	def __append_file(self, path, content):
 		with open(path, 'a') as f:
 			f.write(content+'\n')
 
-
-	def _log(self, msg):
-		self._append_file(JOKES_LOG_PATH, str(datetime.datetime.now()) + ',' + msg)
+	def __log(self, msg):
+		self.__append_file(JOKES_LOG_PATH, str(datetime.datetime.now()) + ',' + msg)

@@ -9,68 +9,71 @@ PONG_MESSAGE = 'PONG :tmi.twitch.tv'
 
 MESSAGE_MAX_CHARACTERS = 500
 
+
 class TwitchSocket(object):
+	CAPABILITIES = ' '.join(["twitch.tv/tags", "twitch.tv/commands"])
+
 	def __init__(self):
-		self._init_socket()
+		self.__init_socket()
 		self._messages = []
 		self._last_incomplete_msg = ''
 
-	def _init_socket(self):
+	def __init_socket(self):
 		self._socket = socket.socket()
 		self.connect(**configuration.CONNECTION_PARAMETERS)
 
 	def connect(self, host, port, oauth_pass, username, channel):
 		self._socket.connect((host, port))
-		self._login(username, oauth_pass)
-		self._join_chat_room(channel)
-		self._register_tags()
+		self.__login(username, oauth_pass)
+		self.__join_chat_room(channel)
+		self.__register_tags()
 
-	def _login(self, username, oauth_pass):
-		self._send("PASS " + oauth_pass)
-		self._send("NICK " + username)
+	def __login(self, username, oauth_pass):
+		self.__send("PASS " + oauth_pass)
+		self.__send("NICK " + username)
 
-	def _join_chat_room(self, channel):
-		self._send("JOIN #" + channel)
+	def __join_chat_room(self, channel):
+		self.__send("JOIN #" + channel)
 		self._channel = channel
 
-	def _register_tags(self):
-		self._send("CAP REQ :twitch.tv/tags")
+	def __register_tags(self):
+		self.__send("CAP REQ :%s" % self.CAPABILITIES)
 
 	def send_message(self, message):
 		message_segments = [message[i:i+MESSAGE_MAX_CHARACTERS] for i in range(0, len(message), MESSAGE_MAX_CHARACTERS)]
 		for segment in message_segments:
 			wrapped_segment = "PRIVMSG #{} :{}".format(self._channel, segment)
-			self._send(wrapped_segment)
+			self.__send(wrapped_segment)
 
-	def _send(self, data):
+	def __send(self, data):
 		self._socket.send(str(data + LINE_BREAK).encode('utf8'))
 
 	def recv_message(self):
 		while len(self._messages) < 1:
-			self._recv_messages()
+			self.__recv_messages()
 		return ChatMessage(self._messages.pop(0))
 
-	def _recv_messages(self):
+	def __recv_messages(self):
 		try:
 			received_messages = self._socket.recv(1024).decode('utf8')
 		except (ConnectionAbortedError, ConnectionResetError):
-			self._init_socket()
+			self.__init_socket()
 			received_messages = self._socket.recv(1024).decode('utf8')
-			
+
 		chat_messages = self._last_incomplete_msg + received_messages
 
 		chat_messages = chat_messages.split(LINE_BREAK)
 		self._last_incomplete_msg = chat_messages.pop(-1)
 
 		if PING_MESSAGE in chat_messages:
-			self._pong()
+			self.__pong()
 			chat_messages.remove(PING_MESSAGE)
 
 		self._messages += filter(lambda message: ChatMessage.is_chat_message(message), chat_messages)
 
-	def _pong(self):
-		self._send(PONG_MESSAGE)
+	def __pong(self):
+		self.__send(PONG_MESSAGE)
 
 	def close(self):
-		self._send("PART #" + self._channel + "")
+		self.__send("PART #" + self._channel + "")
 		self._socket.close()

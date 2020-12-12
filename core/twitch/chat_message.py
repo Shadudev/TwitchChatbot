@@ -14,9 +14,10 @@ class ChatMessage(object):
 	def __init__(self, message_data):
 		self.is_sub = self.is_vip = self.is_streamer = self.is_mod = False
 		self.bits = self.sub_length = self.cheer_badge = 0
-		self._parse_message_data(message_data)
+		self.__parse_message_data(message_data)
 
-	def _parse_message_data(self, message_data):
+	def __parse_message_data(self, message_data):
+		self.raw = message_data
 		privmsg_index = message_data.index('PRIVMSG #')
 		actual_message = message_data[message_data.index(':', privmsg_index) + 1:]
 		self.message = actual_message
@@ -27,7 +28,7 @@ class ChatMessage(object):
 			if key in ChatMessage.TAGS_PARSERS:
 				ChatMessage.TAGS_PARSERS[key](self, value)
 
-	def _parse_badge_info(self, tag_value):
+	def __parse_badge_info(self, tag_value):
 		for value in tag_value.split(','):
 			match = re.match(BADGE_INFO, value)
 			if match:
@@ -42,33 +43,35 @@ class ChatMessage(object):
 				elif badge_id == CHEER_BADGE_ID:
 					self.cheer_badge = int(value[value.index('/')+1:])
 
-	def _parse_bits(self, bits_amount):
+	def __parse_bits(self, bits_amount):
 		self.bits = int(bits_amount)
 
-	def _parse_display_name(self, display_name):
+	def __parse_display_name(self, display_name):
 		self.display_name = display_name
 
-	def _parse_mod(self, mod_value):
+	def __parse_mod(self, mod_value):
 		self.is_mod = mod_value == '1' 
 
-	def _parse_subscriber(self, subscriber_value):
+	def __parse_subscriber(self, subscriber_value):
 		self.is_sub = subscriber_value == '1'
 
-	def _parse_user_id(self, user_id):
+	def __parse_user_id(self, user_id):
 		self.user_id = user_id
 
-	def _parse_user(self, user_type):
+	def __parse_user(self, user_type):
 		self.user = re.match('.*@(.*).tmi.twitch.tv.*', user_type).group(1)
 
-	def _parse_custom_reward_id(self, custom_reward_id):
+	def __parse_custom_reward_id(self, custom_reward_id):
 		self.custom_reward_id = custom_reward_id
+
+	def __parse_message_id(self, message_id):
+		self.msg_id = message_id
 
 	@staticmethod
 	def is_chat_message(message_data):
 		return re.match(MESSAGE_DATA_REGEX, message_data) is not None
 
-
-	TAGS_PARSERS = {'@badge-info': _parse_badge_info, 'badges': _parse_badge_info,
-					'bits': _parse_bits, 'display-name': _parse_display_name, 'mod': _parse_mod,
-					'subscriber': _parse_subscriber, 'user-id': _parse_user_id, 'user-type': _parse_user,
-					'custom-reward-id': _parse_custom_reward_id}
+	TAGS_PARSERS = {'@badge-info': __parse_badge_info, 'badges': __parse_badge_info,
+					'bits': __parse_bits, 'display-name': __parse_display_name, 'mod': __parse_mod,
+					'subscriber': __parse_subscriber, 'user-id': __parse_user_id, 'user-type': __parse_user,
+					'custom-reward-id': __parse_custom_reward_id, 'id': __parse_message_id}

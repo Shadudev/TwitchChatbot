@@ -21,31 +21,31 @@ class Soundbot(CommandHandler):
 			if self._settings_handler.is_mod_command(command_args):
 				self._settings_handler.handle_mod_command(command_args)
 			else:
-				self._handle_simple_command(chat_message)
+				self.__handle_simple_command(chat_message)
 		else:
-			self._handle_simple_command(chat_message)
+			self.__handle_simple_command(chat_message)
 
-	def _handle_simple_command(self, chat_message):
+	def __handle_simple_command(self, chat_message):
 		command = chat_message.message.split(' ')[0]
 		if command in Soundbot.LIST_COMMAND_HANDLERS:
 			Soundbot.LIST_COMMAND_HANDLERS[command](self, chat_message)
 		else:
 			self.handle_play_command(chat_message)
 
-	def _get_sound_name(self, chat_message):
+	def __get_sound_name(self, chat_message):
 		return chat_message.message.lstrip('!').split(' ')[0]
 
 	def list_allowed_sounds(self, chat_message):
 		current_category = api_requests.get_stream_category()
-		self.send_message("Allowed sounds: {}".format(self._get_allowed_sounds(current_category)))
+		self.send_message("Allowed sounds: {}".format(self.__get_allowed_sounds(current_category)))
 
 	def list_all_sounds(self, chat_message):
-		self.send_message("All existing sounds: {}".format(self._get_all_sounds()))
+		self.send_message("All existing sounds: {}".format(self.__get_all_sounds()))
 
-	def _get_allowed_sounds(self, category):
+	def __get_allowed_sounds(self, category):
 		return self.make_pretty(self._settings.get_allowed_sounds(category))
 
-	def _get_all_sounds(self):
+	def __get_all_sounds(self):
 		return self.make_pretty(self._settings.get_existing_sounds())
 
 	def make_pretty(self, collection, separator=', '):
@@ -53,7 +53,7 @@ class Soundbot(CommandHandler):
 
 	def handle_play_command(self, chat_message):
 		current_category = api_requests.get_stream_category()
-		sound_id = self._get_sound_name(chat_message)
+		sound_id = self.__get_sound_name(chat_message)
 		sound_cooldown = self._settings.get_cooldown(sound_id)
 
 		if not self._settings.are_sounds_enabled():
@@ -77,6 +77,5 @@ class Soundbot(CommandHandler):
 		sound_path = self._settings.get_sound_path(sound_id)
 		volume = self._settings.get_volume(sound_id)
 		MediaPlayer.play(sound_path, volume=volume)
-
 
 	LIST_COMMAND_HANDLERS = {'!sounds': list_allowed_sounds, '!allsounds': list_all_sounds}

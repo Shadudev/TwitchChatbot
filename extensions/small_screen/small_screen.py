@@ -38,7 +38,7 @@ class SmallScreenHandler(CommandHandler):
 	@staticmethod
 	def filter_window_names(hwnd, lParam):
 		name = win32gui.GetWindowText(hwnd)
-		if ' - Twitch - ' in name:
+		if ' - Twitch ' in name:
 			lParam.append(name)
 
 	def extract_channel_from_window_name(self, window_name):

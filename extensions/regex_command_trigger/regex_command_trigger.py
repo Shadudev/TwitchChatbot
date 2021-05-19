@@ -15,6 +15,9 @@ DELETE_MESSAGE_FORMAT = '/delete {message_id}'
 class RegexCommandTrigger(CommandHandler):
     def __init__(self, send_message_func, cooldown_manager):
         super(RegexCommandTrigger, self).__init__(send_message_func, cooldown_manager)
+        self.PATTERNS_TRIGGERS = {blower_trigger_word: [self.__blower] for blower_trigger_word in
+                         ['happy', 'grats', 'versary', 'bday', 'birthday', 'b\\-day']}
+        self.PATTERNS_TRIGGERS.update({'bigfollows': [self.__delete_message]})
 
     def should_handle_message(self, chat_message):
         return self.__get_matching_patterns(chat_message)
@@ -45,6 +48,4 @@ class RegexCommandTrigger(CommandHandler):
     def __delete_message(self, chat_message, pattern):
         self.send_message(DELETE_MESSAGE_FORMAT.format(message_id=chat_message.message_id))
 
-    PATTERNS_TRIGGERS = {blower_trigger_word: [__blower] for blower_trigger_word in
-                         ['happy', 'grats', 'versary', 'bday', 'birthday', 'b\\-day']}
-    PATTERNS_TRIGGERS.update({'bigfollows': [__delete_message]})
+

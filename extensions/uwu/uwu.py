@@ -29,10 +29,6 @@ class UwUHandler(CommandHandler):
         user_cooldown = self._cooldowns.get(user, 0)
         return self._cooldown_manager.is_on_cooldown(COMMAND_ID, user, user_cooldown) and user != 'shadudev'
 
-    def __is_uwu_redeem(self, chat_message):
-        command = chat_message.message.split(' ')[0]
-        return command == COMMAND_ID and len(chat_message.message) > len(COMMAND_ID)
-
     def handle_message(self, chat_message):
         if self.is_user_on_cooldown(chat_message.user):
             user_cooldown = self._cooldowns.get(chat_message.user, 0)
@@ -47,7 +43,7 @@ class UwUHandler(CommandHandler):
         self._cooldowns[chat_message.user] = len(chat_message.message) * CHARACTER_COOLDOWN_MULTIPLIER
         self._cooldown_manager.set_on_cooldown(COMMAND_ID, chat_message.user)
 
-        uwu_text = self._translate(text)
+        uwu_text = self.__translate(text)
         self.send_message('UwU: ' + uwu_text)
 
         if os.path.exists(TTS_OUTPUT_FILE):
@@ -55,16 +51,20 @@ class UwUHandler(CommandHandler):
         self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE, configuration.get_channel_name())
         MediaPlayer.play(TTS_OUTPUT_FILE, 100)
 
-    def _translate(self, text):
+    def __is_uwu_redeem(self, chat_message):
+        command = chat_message.message.split(' ')[0]
+        return command == COMMAND_ID and len(chat_message.message) > len(COMMAND_ID)
+
+    def __translate(self, text):
         words = text.split(' ')
         translated_text = []
         for word in words:
-            translated_text.append(self._translate_word(word))
+            translated_text.append(self.__translate_word(word))
 
         return ' '.join(translated_text)
 
-    def _translate_word(self, word):
-        dictionary = self.get_dictionary()
+    def __translate_word(self, word):
+        dictionary = self.__get_dictionary()
         if word.lower() in dictionary:
             return dictionary[word.lower()]
 
@@ -102,5 +102,5 @@ class UwUHandler(CommandHandler):
         converted = converted.replace("unye", "une")
         return converted
 
-    def get_dictionary(self):
+    def __get_dictionary(self):
         return DynamicDictionary.get_dictionary()

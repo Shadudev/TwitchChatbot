@@ -20,7 +20,7 @@ class Chatbot(object):
 		
 		self._twitch_socket = TwitchSocket()
 		self._is_running = True
-		self._timers = extensions.get_timers(Chatbot.send_message)
+		self._timers = extensions.get_timers()
 		self._command_handlers = extensions.get_command_handlers(Chatbot.send_message)
 		self._timer_thread = threading.Thread(target=self.handle_timers)
 
@@ -55,7 +55,9 @@ class Chatbot(object):
 			for timer in self._timers:
 				try:
 					if timers_ticks[timer] >= timer.get_interval():
-						self.send_message(timer.get_message())
+						timer_message = timer.get_message()
+						if timer_message:
+							self.send_message(timer_message)
 						timers_ticks[timer] = timedelta(0)
 					else:
 						timers_ticks[timer] += self._timers_check_interval
@@ -72,6 +74,7 @@ class Chatbot(object):
 	def send_message(message):
 		Chatbot._chatbot.inst_send_message(message)
 
-	def initialize_framework(self):
+	@staticmethod
+	def initialize_framework():
 		configuration.initialize()
 		media_player.MediaPlayer.initialize()

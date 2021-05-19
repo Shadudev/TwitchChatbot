@@ -16,6 +16,10 @@ class ChatMessage(object):
 		self.bits = self.sub_length = self.cheer_badge = 0
 		self.__parse_message_data(message_data)
 
+	@staticmethod
+	def is_chat_message(message_data):
+		return re.match(MESSAGE_DATA_REGEX, message_data) is not None
+
 	def __parse_message_data(self, message_data):
 		self.raw = message_data
 		privmsg_index = message_data.index('PRIVMSG #')
@@ -66,10 +70,6 @@ class ChatMessage(object):
 
 	def __parse_message_id(self, message_id):
 		self.msg_id = message_id
-
-	@staticmethod
-	def is_chat_message(message_data):
-		return re.match(MESSAGE_DATA_REGEX, message_data) is not None
 
 	TAGS_PARSERS = {'@badge-info': __parse_badge_info, 'badges': __parse_badge_info,
 					'bits': __parse_bits, 'display-name': __parse_display_name, 'mod': __parse_mod,

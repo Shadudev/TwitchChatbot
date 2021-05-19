@@ -9,7 +9,7 @@ from extensions.small_screen import small_screen
 from extensions.regex_command_trigger import regex_command_trigger
 
 
-def get_timers(send_message_func):
+def get_timers():
 	return [promotional_timer.PromotionalTimer()]
 
 def get_command_handlers(send_message_func):

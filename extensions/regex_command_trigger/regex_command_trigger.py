@@ -29,7 +29,7 @@ class RegexCommandTrigger(CommandHandler):
 	def __get_matching_patterns(self, chat_message):
 		matching_regexes = []
 		for pattern in self.PATTERNS_TRIGGERS:
-			if re.match(pattern, chat_message.message):
+			if re.match(pattern, chat_message.message.lower()):
 				matching_regexes.append(pattern)
 		return matching_regexes
 
@@ -38,11 +38,13 @@ class RegexCommandTrigger(CommandHandler):
 			trigger(self, chat_message, pattern)
 		
 	def __blower(self, chat_message, pattern):
-		match = re.match(pattern, chat_message.message).group(1)
+		match = re.match(pattern, chat_message.message.lower()).group(1)
 		self.send_message('{channel} said {match}!'.format(channel=chat_message.display_name, match=match))
 		MediaPlayer.play(BLOWER_SOUND_PATH, 80)
 
 	def __delete_message(self, chat_message, pattern):
 		self.send_message(DELETE_MESSAGE_FORMAT.format(message_id=chat_message.message_id))
 
-	PATTERNS_TRIGGERS = {'.*(happy|grats|versary).*': [__blower], '.*bigfollows.*': [__delete_message]}
+	PATTERNS_TRIGGERS = {blower_trigger_word: [__blower] for blower_trigger_word in
+						 ['happy', 'grats', 'versary', 'bday', 'birthday', 'b\\-day']}
+	PATTERNS_TRIGGERS.update({'bigfollows': [__delete_message]})

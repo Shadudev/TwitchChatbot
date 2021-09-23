@@ -38,11 +38,16 @@ class MediaPlayer(object):
 
     @classmethod
     def skip(cls):
-        cls.__player.next()
+        if -1 == cls.__player.next():
+            cls.__set_volume(0)
 
     @classmethod
     def __update_next_volume(cls):
-        cls.__player.get_media_player().audio_set_volume(cls.__get_next_volume())
+        cls.__set_volume(cls.__get_next_volume())
+
+    @classmethod
+    def __set_volume(cls, volume):
+        cls.__player.get_media_player().audio_set_volume(volume)
 
     @classmethod
     def __get_next_volume(cls):
@@ -74,7 +79,7 @@ class MediaPlayer(object):
         for _ in range(cls.__currently_playing_index):
             cls.__media_list.remove_index(0)
 
-        cls.__media_volumes.clear()
+        cls.__media_volumes = cls.__media_volumes[cls.__currently_playing_index:]
         cls.__currently_playing_index = 0
         cls.__media_list.unlock()
 

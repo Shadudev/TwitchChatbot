@@ -3,13 +3,13 @@ import requests
 TTS_SERVER_URI = "https://tts-server.glitch.me"
 CHANNEL_HEADER_NAME = "channel"
 
-JAPANESE_CODE = 'ja-JP'
-JAPANESE_VOICE_NAME = 'ja-JP-Wavenet-A'
-SPEAKING_RATE = 1.3
+JAPANESE_CODE = 'en-AU'
+JAPANESE_VOICE_NAME = 'en-AU-Wavenet-B'
+SPEAKING_RATE = 1
 PITCH = 1
 
 
-class UwUTTS(object):
+class TTS(object):
     def get_speech(self, text, output_speech_file, channel, language_code=JAPANESE_CODE, voice_name=JAPANESE_VOICE_NAME,
                    speaking_rate=SPEAKING_RATE, pitch=PITCH):
         headers = {CHANNEL_HEADER_NAME: channel}

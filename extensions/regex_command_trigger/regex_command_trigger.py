@@ -11,7 +11,7 @@ SCRIPT_BASE_PATH = os.path.dirname(__file__)
 SOUNDS_FOLDER_PATH = os.path.join(SCRIPT_BASE_PATH, 'Sounds')
 
 BLOWER_SOUND_PATH = os.path.join(SOUNDS_FOLDER_PATH, 'blower.mp3')
-BLOWER_TRIGGER_WORDS = ['happy', 'congratulations', 'congrats', 'grats', 'versary', 'bday', 'birthday']
+BLOWER_TRIGGER_WORDS = ['happy', 'congratulations', 'congrats', 'grats', 'versary', 'bday', 'birthday', 'penis', 'diack', 'sosej', 'hotdug', 'hotduggy', '50percentgravy']
 SEPARATE_WORDS_PATTERN = '[\\w]+'
 
 DELETE_MESSAGE_FORMAT = '/delete {message_id}'
@@ -21,7 +21,7 @@ class RegexCommandTrigger(CommandHandler):
     def __init__(self, send_message_func, cooldown_manager):
         super(RegexCommandTrigger, self).__init__(send_message_func, cooldown_manager)
         self.PATTERNS_TRIGGERS = {
-            '.*({words}).*'.format(words='|'.join(BLOWER_SOUND_PATH)): [self.__blower],
+            '.*({words}).*'.format(words='|'.join(BLOWER_TRIGGER_WORDS)): [self.__blower],
             'bigfollows': [self.__delete_message]
         }
 

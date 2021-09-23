@@ -1,5 +1,6 @@
 import datetime
 import os
+import tempfile
 
 from core.framework import configuration
 from core.framework.extensions.bases.command_handler import CommandHandler
@@ -8,10 +9,6 @@ from extensions.uwu import tts
 from extensions.uwu.dynamic_dictionary import DynamicDictionary
 
 COMMAND_ID = '!uwu'
-
-SCRIPT_BASE_PATH = os.path.dirname(__file__)
-TTS_OUTPUT_FILE = os.path.join(SCRIPT_BASE_PATH, 'output.mp3')
-SET_REPLACEMENTS_FILE = os.path.join(SCRIPT_BASE_PATH, 'set_replacements.json')
 
 CHARACTER_COOLDOWN_MULTIPLIER = datetime.timedelta(seconds=5)
 
@@ -46,10 +43,9 @@ class UwUHandler(CommandHandler):
         uwu_text = self.__translate(text)
         self.send_message('UwU: ' + uwu_text)
 
-        if os.path.exists(TTS_OUTPUT_FILE):
-            os.unlink(TTS_OUTPUT_FILE)
-        self._tts.get_speech(uwu_text, TTS_OUTPUT_FILE, configuration.get_channel_name())
-        MediaPlayer.play(TTS_OUTPUT_FILE, 100)
+        with tempfile.NamedTemporaryFile('wb', delete=False) as output_file:
+            self._tts.get_speech(uwu_text, output_file, configuration.get_channel_name())
+            MediaPlayer.play(output_file.name, 70)
 
     def __is_uwu_redeem(self, chat_message):
         command = chat_message.message.split(' ')[0]
